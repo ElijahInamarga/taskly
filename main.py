@@ -1,29 +1,16 @@
 import os
 from dotenv import load_dotenv
-import requests
+from package import Canvas
 
 load_dotenv()
 API_URL = os.getenv("API_URL")
-my_token = os.getenv("CANVAS_TOKEN")
-headers = {"Authorization": "Bearer " + my_token}
-
-def get_courses() -> list:
-    response = requests.get(f"{API_URL}/courses?enrollment_state=active", headers=headers)
-    courses = []
-    for course in response.json():
-        courses.append({"name": course["name"], "assignments": get_assignments(course["id"])})
-    return courses
-
-def get_assignments(course_id : str) -> list:
-    response = requests.get(f"{API_URL}/courses/{course_id}/assignments", headers=headers)
-    assignments = []
-    for assignment in response.json():
-        assignments.append(assignment["name"])
-    return assignments
+MY_TOKEN = os.getenv("CANVAS_TOKEN")
 
 if __name__ == "__main__":
+    canvas = Canvas(API_URL, MY_TOKEN)
+    
     # Temporary
-    for course in get_courses():
+    for course in canvas.get_courses():
         if course["assignments"]:
             print(course["name"] + ": ")
             print(course["assignments"])
