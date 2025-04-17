@@ -17,12 +17,20 @@ class Canvas():
         response = requests.get(f"{self.API_URL}/courses?enrollment_state=active", headers=self.headers)
         courses = []
         for course in response.json():
-            courses.append({"name": course["name"], "assignments": self.get_assignments(course["id"])})
+            courses.append({"name": course["name"], "assignments": self.__get_assignments(course["id"])})
         return courses
 
-    def get_assignments(self, course_id : str) -> list:
+    def __get_assignments(self, course_id : str) -> list:
         response = requests.get(f"{self.API_URL}/courses/{course_id}/assignments", headers=self.headers)
         assignments = []
         for assignment in response.json():
             assignments.append(assignment["name"])
         return assignments
+    
+    def print_courses_and_assignments(self):
+        for course in self.get_courses():
+            if course["assignments"]:
+                print(course["name"] + ": ")
+                print(course["assignments"])
+            else:
+                print(course["name"])
