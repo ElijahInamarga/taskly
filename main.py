@@ -8,4 +8,4 @@ MY_TOKEN = os.getenv("CANVAS_TOKEN")
 
 if __name__ == "__main__":
     canvas = Canvas(API_URL, MY_TOKEN)
-    canvas.print_courses_and_assignments()
+    canvas.print_all_course_data()
